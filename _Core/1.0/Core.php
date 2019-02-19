@@ -11,19 +11,41 @@ require_once 'Core_functions.php';
 // Загрузчик модулей
 require_once $config['path']['modules'] . '_ModuleLoader/1.0/ModuleLoader.php';
 
-$config['scripts_modules'][] = $config['path']['modules'] . '_Core/1.0/scripts.js';
 
 if ($url[0] == 'scripts') {
+
+    $config['scripts_modules'][] = $config['path']['modules'] . '_Core/1.0/scripts.js';
 
     header('Expires: 0');
     header('Pragma: no-cache');
     header('Last-Modified: ' . gmdate("D, d M Y H:i:s") . ' GMT');
     header('Content-Type: application/javascript; charset=utf-8');
     $scripts = '';
-    if (!empty($config['scripts_modules']))
-        foreach ($config['scripts_modules'] as $item) {
-            $scripts .= file_get_contents($item);
-        }
 
+    foreach ($config['scripts_modules'] as $item) {
+        $scripts .= file_get_contents($item);
+    }
     echo $scripts;
+
+} else if ($url[0] == 'api') {
+
+    $name_action = $_POST['action'];
+
+    if (is_file($config['path']['methods'] . $name_action . '.php')) {
+        include_once($config['path']['methods'] . $name_action . '.php');
+    }
+
+    @header('Expires: 0');
+    @header('Pragma: no-cache');
+    @header('Last-Modified: ' . gmdate("D, d M Y H:i:s") . ' GMT');
+    @header('Content-Type: application/javascript; charset=utf-8');
+
+
+    if (@$response !== false) {
+
+        echo json_encode(array('response' => $response));
+
+    }
+
 }
+?>

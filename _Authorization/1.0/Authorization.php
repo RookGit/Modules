@@ -240,6 +240,8 @@ class Authorization
 
                 $array_site_fields = $config['modules'][self::$name_modul]['site_fields'];
 
+                if(empty($array_site_fields)) $array_site_fields = [];
+
                 array_push($array_site_fields, 'login', 'password');
 
                 foreach ($array_site_fields as $key) {
