@@ -12,7 +12,7 @@ require_once 'Core_functions.php';
 require_once $config['path']['modules'] . '_ModuleLoader/1.0/ModuleLoader.php';
 
 
-if ($url[0] == 'scripts') {
+if ($url[0] === 'scripts') {
 
     $config['scripts_modules'][] = $config['path']['modules'] . '_Core/1.0/scripts.js';
 
@@ -27,34 +27,50 @@ if ($url[0] == 'scripts') {
     }
     echo $scripts;
 
-} else if ($url[0] == 'api') {
-
-    $name_action = $_POST['action'];
-
-    unset ($_POST['action']);
-
-    $params = $_POST;
-
-   $handler_render_action = false;
-
-    if (is_file($config['path']['methods'] . $name_action . '.php')) {
-        include_once($config['path']['methods'] . $name_action . '.php');
-    }
-
-    @header('Expires: 0');
-    @header('Pragma: no-cache');
-    @header('Last-Modified: ' . gmdate("D, d M Y H:i:s") . ' GMT');
-    @header('Content-Type: application/javascript; charset=utf-8');
+} else {
+    // Конфиг сайта
+    require_once $config['path']['root'] . 'config.php';
+}
 
 
-    if (@$response !== false) {
+if ($url[0] === 'api') {
 
-        if($handler_render_action === true)
-            $response['render'] = 'render_'.$name_action;
+    if ($_POST['action'] != null) {
 
-        echo json_encode(array('response' => $response));
+        $name_action = $_POST['action'];
 
+        unset($_POST['action']);
+
+        $params = $_POST;
+
+        $handler_render_action = false;
+
+        $action = $config['path']['methods'] . $name_action . '.php';
+
+        if (is_file($action))
+            include_once($action);
+
+        @header('Expires: 0');
+        @header('Pragma: no-cache');
+        @header('Last-Modified: ' . gmdate("D, d M Y H:i:s") . ' GMT');
+        @header('Content-Type: application/javascript; charset=utf-8');
+
+
+        if (@$response !== false) {
+
+            if ($handler_render_action === true)
+                $response['render'] = 'render_' . $name_action;
+
+            echo json_encode(array('response' => $response));
+
+        }
     }
 
 }
+
+// Файл для пользовательских php скриптов
+if ($config['scripts_mode'] == false && $config['api_mode'] == false) {
+    require_once $config['path']['root'] . 'assets/site/index.php';
+} else
+    exit;
 ?>

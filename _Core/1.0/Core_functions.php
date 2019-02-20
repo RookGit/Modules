@@ -16,6 +16,12 @@ function pre($array, $comment = false, $dump = false)
     if ($comment) echo '-->';
 }
 
+function redirect($path)
+{
+    header('location: '.$path);
+}
+
+
 
 
 function get_config_modules($key, $module_name = null)

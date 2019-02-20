@@ -34,6 +34,14 @@ function query(string $query, array $params = [])
 {
     global $pdo, $config;
 
+    if($config['debug'] === true)
+    {
+        if($config['query'] == null)
+            $config['query'] = [];
+
+        $config['query'][] = ['query' => $query, 'params' => $params];
+    }
+
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute($params);
