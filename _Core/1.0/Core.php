@@ -31,6 +31,12 @@ if ($url[0] == 'scripts') {
 
     $name_action = $_POST['action'];
 
+    unset ($_POST['action']);
+
+    $params = $_POST;
+
+   $handler_render_action = false;
+
     if (is_file($config['path']['methods'] . $name_action . '.php')) {
         include_once($config['path']['methods'] . $name_action . '.php');
     }
@@ -42,6 +48,9 @@ if ($url[0] == 'scripts') {
 
 
     if (@$response !== false) {
+
+        if($handler_render_action === true)
+            $response['render'] = 'render_'.$name_action;
 
         echo json_encode(array('response' => $response));
 

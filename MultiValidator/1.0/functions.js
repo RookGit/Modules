@@ -9,6 +9,10 @@ $(document).on('submit', '[validator][data-form]', function (event) {
 
     var errors = 0;
     var form_data = new Array();
+
+    // Ключи формы
+    var form_keys = [];
+
     form_data.push({'name': 'action', 'value': data_action});
     form_data.push({'name': 'form_id', 'value': data_form_id});
     form_data.push({'name': 'data_form', 'value': data_form});
@@ -25,6 +29,9 @@ $(document).on('submit', '[validator][data-form]', function (event) {
             var attr_required = $(this).attr('required');
 
             if (typeof attr_required !== typeof undefined && attr_required !== false) {
+
+                form_keys[form_keys.length] = data_element;
+
                 if (data_valid == 'js') {
                     var rules = {};
 
@@ -91,7 +98,7 @@ $(document).on('submit', '[validator][data-form]', function (event) {
         // });
 
 
-        // form_data.push({'name': 'js_now', 'value': $.now()});
+        form_data.push({'name': 'keys', 'value': form_keys});
         send_request(form_data);
     }
 
@@ -111,5 +118,41 @@ $('[validator][data-form]').each(function () {
         }
     );
 });
+
+function set_errors_form(data) {
+
+    var keys = data.response.keys.split(',');
+    var form_id = data.response.form_id;
+    var data_form = data.response.data_form;
+
+    var form = $('[data-form="'+data_form+'"][data-form-id="'+form_id+'"]');
+
+    if('errors' in data.response)
+    {
+        $('[data-context="errors"]').text(data.response['errors']).show();
+    }
+    else
+    {
+        $('[data-context="errors"]').text('').hide();
+    }
+
+    keys.forEach(function(item) {
+
+        var element = $('[data-element=' + item + ']');
+
+        if(item in data.response)
+        {
+            var error = data.response[item];
+            $('[data-error-element=' + item + ']').text(error).show();
+            $(element).removeClass('input_success').addClass('input_error');
+        }
+        else
+        {
+            $('[data-error-element=' + item + ']').hide();
+            $(element).removeClass('input_success').removeClass('input_error');
+        }
+
+    });
+}
 
 

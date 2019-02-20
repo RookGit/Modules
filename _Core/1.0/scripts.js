@@ -24,10 +24,6 @@ function send_request(params) {
 
             if (data.response.render != null) {
 
-
-                log(data);
-                log(data.response.render);
-
                 window[data.response.render](data);
 
             }
