@@ -1,3 +1,11 @@
+var system = {};
+
+system.url = location.pathname.split('/');
+system.url.splice(0, 1);
+
+if (system.url[0] == '')
+    system.url[0] = 'root';
+
 function log(data) {
     console.log(data);
 }

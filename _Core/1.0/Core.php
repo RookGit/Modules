@@ -32,7 +32,6 @@ if ($url[0] === 'scripts') {
     require_once $config['path']['root'] . 'config.php';
 }
 
-
 if ($url[0] === 'api') {
 
     if ($_POST['action'] != null) {
@@ -69,7 +68,7 @@ if ($url[0] === 'api') {
 }
 
 // Файл для пользовательских php скриптов
-if ($config['scripts_mode'] == false && $config['api_mode'] == false) {
+if ($config['scripts_mode'] == false && $config['api_mode'] == false && $system['status_admin_panel'] == false) {
     require_once $config['path']['root'] . 'assets/site/index.php';
 } else
     exit;
