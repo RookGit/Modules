@@ -2,7 +2,7 @@
 
 $local_data['module_name'] = $name;
 
-$config['modules'][$local_data['module_name']]['tpl_path'] = $config['path']['root'] . 'assets/tpl/';
+$config['modules'][$local_data['module_name']]['tpl_path'] = $config['path']['root'] . 'site/view/';
 $config['modules'][$local_data['module_name']]['cache_tpl_path'] = $config['path']['root'] . 'assets/temp/twig/';
 
 if($config['debug'] == false)
