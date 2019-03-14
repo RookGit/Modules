@@ -73,9 +73,11 @@ if ($config['scripts_mode'] == false
     && $system['status_admin_panel'] == false
 ) {
 
+    require_once $config['path']['mvc'].'router.php';
+
     if(Router::getRout())
     {
-       echo 555;
+        require_once $config['path']['controllers'].Router::getController().'.php';
     }
 
 } else
