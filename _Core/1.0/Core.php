@@ -68,9 +68,16 @@ if ($url[0] === 'api') {
 }
 
 // Файл для пользовательских php скриптов
-if ($config['scripts_mode'] == false && $config['api_mode'] == false
-    && $system['status_admin_panel'] == false) {
-    require_once $config['path']['root'] . 'site/router.php';
+if ($config['scripts_mode'] == false
+    && $config['api_mode'] == false
+    && $system['status_admin_panel'] == false
+) {
+
+    if(Router::getRout())
+    {
+       echo 555;
+    }
+
 } else
     exit;
 ?>
